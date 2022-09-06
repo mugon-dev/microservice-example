@@ -6,6 +6,7 @@ import com.example.userservice.service.UserService;
 import com.example.userservice.vo.Greeting;
 import com.example.userservice.vo.RequestUser;
 import com.example.userservice.vo.ResponseUser;
+import io.micrometer.core.annotation.Timed;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,19 +35,28 @@ public class UserController {
     }
 
     @GetMapping("/health_check")
+    @Timed(value = "users.status", longTask = true)
     public String status() {
-        return String.format("It's Working in User Service"
-                + ", port(local.server.port)=" + env.getProperty("local.server.port")
-                + ", port(server.port)=" + env.getProperty("server.port")
-                + ", gateway ip=" + env.getProperty("gateway.ip")
-                + ", message=" + env.getProperty("greeting.message")
-                + ", token secret=" + env.getProperty("token.secret")
-                + ", token expiration time=" + env.getProperty("token.expiration_time"));
+        return String.format(
+                "It's Working in User Service"
+                        + ", port(local.server.port)="
+                        + env.getProperty("local.server.port")
+                        + ", port(server.port)="
+                        + env.getProperty("server.port")
+                        + ", gateway ip="
+                        + env.getProperty("gateway.ip")
+                        + ", message="
+                        + env.getProperty("greeting.message")
+                        + ", token secret="
+                        + env.getProperty("token.secret")
+                        + ", token expiration time="
+                        + env.getProperty("token.expiration_time"));
     }
 
     @GetMapping("/welcome")
+    @Timed(value = "users.welcome", longTask = true)
     public String welcome() {
-//        return env.getProperty("greeting.message");
+        //        return env.getProperty("greeting.message");
         return greeting.getMessage();
     }
 
@@ -64,9 +74,10 @@ public class UserController {
     public ResponseEntity<List<ResponseUser>> getUsers() {
         Iterable<UserEntity> userList = userService.getUserByAll();
         List<ResponseUser> result = new ArrayList<>();
-        userList.forEach(v -> {
-            result.add(new ModelMapper().map(v, ResponseUser.class));
-        });
+        userList.forEach(
+                v -> {
+                    result.add(new ModelMapper().map(v, ResponseUser.class));
+                });
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
@@ -76,5 +87,4 @@ public class UserController {
         ResponseUser returnValue = new ModelMapper().map(userDto, ResponseUser.class);
         return ResponseEntity.status(HttpStatus.OK).body(returnValue);
     }
-
 }
