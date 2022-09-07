@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: discoveryservice
+  config:
+    import: "optional:configserver:http://localhost:8888"
 eureka:
   client:
     register-with-eureka: false

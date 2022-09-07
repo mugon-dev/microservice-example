@@ -1,0 +1,19 @@
+version: "3"
+services:
+  mariadb:
+    container_name: "mariadb"
+    image: mariadb
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - "./data:/var/lib/mysql"
+    environment:
+      MARIADB_DATABASE: mydb
+      MARIADB_USER: root
+      MARIADB_PASSWORD: test1357
+      MARIADB_ROOT_PASSWORD: test1357
+networks:
+  default:
+    name: ecommerce-network
+    external: true

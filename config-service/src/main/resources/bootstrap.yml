@@ -1,6 +1,8 @@
 encrypt:
-#  key: ab!cdefgio123siudhfsdjklfn123asdfa@sdfasdf123asdfasdf
+  #  key: ab!cdefgio123siudhfsdjklfn123asdfa@sdfasdf123asdfasdf
   key-store:
-    location: file://${user.home}/workspace/devops/keystore/apiEncryptionKey.jks
+    #    location: file://${user.home}/workspace/devops/microservice-example/config-service/apiEncryptionKey.jks
+    #    location: file://apiEncryptionKey.jks
+    location: classpath:apiEncryptionkey.jks
     password: test1234
     alias: apiEncryptionKey

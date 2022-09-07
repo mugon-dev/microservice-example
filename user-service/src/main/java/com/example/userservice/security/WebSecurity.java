@@ -21,10 +21,12 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-//        http.authorizeRequests().antMatchers("/users/**").permitAll();
+        //        http.authorizeRequests().antMatchers("/users/**").permitAll();
         http.authorizeRequests().antMatchers("/actuator/**").permitAll();
-        http.authorizeRequests().antMatchers("/**")
-                .hasIpAddress("192.168.0.117")
+        http.authorizeRequests()
+                .antMatchers("/**")
+                //                .hasIpAddress("192.168.0.117")
+                .hasIpAddress(env.getProperty("gateway.ip"))
                 .and()
                 .addFilter(getAuthenticationFilter());
 
@@ -32,8 +34,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     }
 
     private AuthenticationFilter getAuthenticationFilter() throws Exception {
-        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager(), userService, env);
-//        authenticationFilter.setAuthenticationManager(authenticationManager());
+        AuthenticationFilter authenticationFilter =
+                new AuthenticationFilter(authenticationManager(), userService, env);
+        //        authenticationFilter.setAuthenticationManager(authenticationManager());
         return authenticationFilter;
     }
 
